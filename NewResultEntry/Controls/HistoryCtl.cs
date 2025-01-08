@@ -19,15 +19,12 @@ namespace NewResultEntry.Controls
         public HistoryCtl ( )
         {
             InitializeComponent ( );
-
-
         }
 
         public void ClearList ( )
         {
             lbMedical.Items.Clear ( );
             radListControl1.Items.Clear ( );
-            //    lblVisit.Text = "";
         }
 
         public void LoadData ( string Cusdg, IQueryable<SDG_USER> Historylist )

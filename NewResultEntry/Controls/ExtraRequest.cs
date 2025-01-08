@@ -15,6 +15,8 @@ using System.Text.RegularExpressions;
 using NewResultEntry.Controls.Extra_req_Entities;
 using Patholab_Common;
 using Patholab_DAL_V1.Enums;
+using System.Diagnostics;
+using HPV_RE;
 
 namespace NewResultEntry.Controls
 {
@@ -274,15 +276,11 @@ namespace NewResultEntry.Controls
                             Entity_NAME = rdu.U_EXTRA_REQUEST_DATA.NAME.Split(';')[0],
                             Action = ru.U_EXTRA_REQUEST.NAME.Split(';')[0],
                             Details = rdu.U_REQUEST_DETAILS,
-                            Status = rdu.U_STATUS,//exrqstatusList[rdu.U_STATUS]
+                            Status = rdu.U_STATUS,
                             Created_By = Operators.FirstOrDefault(x => x.OPERATOR_ID == ru.U_CREATED_BY.Value).NAME,
                             Created_on = ru.U_CREATED_ON,
-                            Request_Type = rdu.U_REQ_TYPE,//==null?"":exrqtypeList[rdu.U_REQ_TYPE]
+                            Request_Type = rdu.U_REQ_TYPE,
                             Remarks = rdu.U_REMARKS,
-                            //string opName=     GetOperatorById ( cmbDoct.SelectedValue.ToString ( ) );
-                            //   DESCRIPTION = ru.U_EXTRA_REQUEST.DESCRIPTION,
-
-                            //  ru.U_CREATED_BY.Value
 
                         }).ToList();
             HasReq = extr4sdg != null && extr4sdg.Count > 0;
@@ -327,6 +325,7 @@ namespace NewResultEntry.Controls
             foreach (BlockWrapper blockWrapper in blockWrappers)
             {
 
+                Debugger.Launch();
                 if (blockWrapper.Colors4add == null)
                     continue;
 
@@ -451,42 +450,21 @@ namespace NewResultEntry.Controls
 
                 if (cmbDoct.SelectedItem != null)
                 {
+                    //DON'T CHANGE THE DESC, IT'S BEEING USEDIN EXTRA_SLIDES VIEW
+                    string logDesc = $"block: {blockAliqParent.NAME} color type: {_dal.GetPartType(color)} Extra request for {Convert.ToInt32(cmbDoct.SelectedValue.ToString())}";
                     _dal.Ex_Req_Logic(_sdg.SDG_ID, new_aliq.NAME, ExtraRequestType.H, Convert.ToInt32(cmbDoct.SelectedValue.ToString()), color, radTextBoxRemarks.Text);
-                    _dal.InsertToSdgLog(_sdg.SDG_ID, "Extra Request", sid, "Extra request for " + Convert.ToInt32(cmbDoct.SelectedValue.ToString()));
+                    _dal.InsertToSdgLog(_sdg.SDG_ID, "Extra Request", sid, logDesc);
                     _dal.SaveChanges();
                 }
                 else
                 {
+                    //DON'T CHANGE THE DESC, IT'S BEEING USED IN EXTRA_SLIDES VIEW
                     var a = findCreatedBy();
+                    string logDesc = $"block: {blockAliqParent.NAME} color type: {_dal.GetPartType(color)} Extra request for {a.PHRASE_NAME}";
                     _dal.Ex_Req_Logic(_sdg.SDG_ID, new_aliq.NAME, ExtraRequestType.H, Convert.ToInt32(a.PHRASE_NAME), color, radTextBoxRemarks.Text);
-                    _dal.InsertToSdgLog(_sdg.SDG_ID, "Extra Request", sid, "Extra request for " + a.PHRASE_NAME);
+                    _dal.InsertToSdgLog(_sdg.SDG_ID, "Extra Request", sid, logDesc);
                     _dal.SaveChanges();
                 }
-
-
-
-
-
-
-                //הקוד שהיה קודם
-                //Get operator name from combo box
-
-                //long doc = Convert.ToInt64(cmbDoct.SelectedValue);
-                //Enter u_extra_request
-                //_dal.Ex_Req_Logic(_sdg.SDG_ID, new_aliq.NAME, ExtraRequestType.H, doc, color, radTextBoxRemarks.Text);
-
-                ////    U_EXTRA_REQUEST nr = EnterNewRequest(ADD_SLIDE, new_aliq.NAME, doc);
-
-                ////   if (nr == null) return;
-
-                //_dal.InsertToSdgLog(_sdg.SDG_ID, "Extra Request", sid, "Extra request for " + cmbDoct.Text);
-
-                ////Enter u_extra_request_data
-                ////     EnterNewRequestData(nr, blockAliqParent.NAME, "Block", color, new_aliq.NAME);
-
-
-                //_dal.SaveChanges();
-
             }
         }
 

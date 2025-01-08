@@ -414,7 +414,6 @@ namespace NewResultEntry
                 _sdgDtls = _dal.Get_SDG_DETAILS(sn);
 
                 if (_sdgDtls == null || _sdgDtls.STATUS == "U")
-                //  if (_sdg == null)
                 {
                     MessageBox.Show(".דרישה לא קיימת או לא התקבלה", Constants.MboxCaption, MessageBoxButtons.OK,
                                     MessageBoxIcon.Hand);
@@ -445,8 +444,7 @@ namespace NewResultEntry
                 }
             }
             catch
-                (Exception
-                    ex)
+                (Exception ex)
             {
                 MessageBox.Show(".שגיאה בטעינת הדרישה" + ex.Message,
                                 Constants.MboxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -1167,7 +1165,6 @@ namespace NewResultEntry
 
                 MessageBox.Show("Error on btnSave_Click" + ex.Message, Constants.MboxCaption, MessageBoxButtons.OK,
                                 MessageBoxIcon.Error);
-                Logger.WriteLogFile(ex);
             }
             txtBarcodeName.Focus();
         }
